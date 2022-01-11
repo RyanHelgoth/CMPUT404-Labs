@@ -2,7 +2,8 @@ import requests as req
 
 
 def main():
-    page = req.get("https://www.google.com/")
+    url = "https://raw.githubusercontent.com/RyanHelgoth/CMPUT404-Labs/main/Lab1/lab1.py" 
+    page = req.get(url)
     print(page.text)
 
 
