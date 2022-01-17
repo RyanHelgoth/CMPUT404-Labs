@@ -23,8 +23,11 @@ def main():
 
     bufferSize = 4096 #Max amount of bytes to receive at once
     reply = mySocket.recv(bufferSize)
+    
+    while reply:
+        print(reply)
+        reply = mySocket.recv(bufferSize)
 
-    print(reply)
-
+    mySocket.close()
 
 main() 
