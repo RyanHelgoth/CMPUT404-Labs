@@ -15,13 +15,12 @@ def main():
 
     conn, address = mySocket.accept()
     bufferSize = 4096 #Max amount of bytes to receive at once
-    while True:
+    data = conn.recv(bufferSize)
+    while data:
+        conn.sendall(data)
         data = conn.recv(bufferSize)
-        if not data:
-            break
-        else: 
-            conn.sendall(data)
 
     conn.close()
+    mySocket.close()
 
 main() 
