@@ -12,6 +12,8 @@ def main():
 
     #AF_INET specifies we are using IPV4, SOCK_STREAM specifies we are using TCP
     mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #https://stackoverflow.com/questions/51316029/python-socket-recv-data-in-while-loop-not-stopping
+    mySocket.setblocking(False) 
     ip = socket.gethostbyname(host)
 
     mySocket.connect((ip, port))

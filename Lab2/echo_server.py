@@ -7,7 +7,7 @@ import socket
 def main():
     #https://realpython.com/python-sockets/#echo-client-and-server
     host = "127.0.0.1"  #Local host
-    listenPort = 50000  
+    listenPort = 8001 
 
     mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     mySocket.bind((host, listenPort))
