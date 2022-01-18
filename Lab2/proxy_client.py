@@ -10,7 +10,7 @@ def main():
     mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     mySocket.connect((HOST, PORT))
 
-    request = "GET / HTTP/1.1\r\n Host: www.google.com\r\n\r\n".encode(encoding = "us_ascii")
+    request = "GET / HTTP/1.1\r\n\r\n".encode(encoding = "us_ascii")
     mySocket.sendall(request)
     mySocket.shutdown(socket.SHUT_WR)
 
