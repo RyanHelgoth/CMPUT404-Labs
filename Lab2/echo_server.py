@@ -14,6 +14,7 @@ def main():
     mySocket.listen()
 
     conn, address = mySocket.accept()
+    print("Connected by", address)
     bufferSize = 4096 #Max amount of bytes to receive at once
     data = conn.recv(bufferSize)
     while data:
