@@ -1,7 +1,5 @@
 #Written by Ryan Helgoth 
 
-#TODO: finish citations, test on vm
-
 import socket
 from multiprocessing import Process
 
@@ -16,7 +14,6 @@ def handleEcho(conn, address):
     conn.close()
 
 def main():
-    #https://realpython.com/python-sockets/#echo-client-and-server
     host = "127.0.0.1"  #Local host
     listenPort = 8001 
 

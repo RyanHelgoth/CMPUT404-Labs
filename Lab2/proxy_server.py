@@ -1,11 +1,36 @@
 #Written by Ryan Helgoth with some code from lab 2 examples.
 import socket
+from multiprocessing import Process
 
 LOCAL_HOST = "127.0.0.1"
 REMOTE_HOST = "www.google.com"
 HOST_PORT = 80
 CLIENT_PORT = 8001
 BUFFER_SIZE = 4096
+
+
+def handleRequest(conn, addr):
+     print("Connected by", addr)
+
+     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as proxyEnd:
+         print("Connecting to", REMOTE_HOST)
+         ip = socket.gethostbyname(REMOTE_HOST)
+         proxyEnd.connect((ip, HOST_PORT))
+
+         print("Sending client data to", REMOTE_HOST)
+         clientData = conn.recv(BUFFER_SIZE)
+         proxyEnd.sendall(clientData)
+         proxyEnd.shutdown(socket.SHUT_WR)
+
+         print("Sending data from", REMOTE_HOST, "to client")
+         hostData = proxyEnd.recv(BUFFER_SIZE)
+         while hostData:
+             conn.sendall(hostData)
+             hostData = proxyEnd.recv(BUFFER_SIZE)
+            
+         conn.close()
+
+
 
 def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as proxyStart:
@@ -14,28 +39,13 @@ def main():
         proxyStart.bind((LOCAL_HOST, CLIENT_PORT))
         proxyStart.listen(2)
         
-        
-        conn, addr = proxyStart.accept()
-        print("Connected by", addr)
+        while True:
+            conn, addr = proxyStart.accept()
+            process = Process(target=handleRequest, args=(conn, addr))
+            process.daemon = True 
+            process.start()
+            print("Started process", process)
 
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as proxyEnd:
-            print("Connecting to", REMOTE_HOST)
-            ip = socket.gethostbyname(REMOTE_HOST)
-            proxyEnd.connect((ip, HOST_PORT))
-
-            print("Sending client data to", REMOTE_HOST)
-            clientData = conn.recv(BUFFER_SIZE)
-            proxyEnd.sendall(clientData)
-            proxyEnd.shutdown(socket.SHUT_WR)
-
-            print("Sending data from", REMOTE_HOST, "to client")
-            hostData = proxyEnd.recv(BUFFER_SIZE)
-            while hostData:
-                conn.sendall(hostData)
-                hostData = proxyEnd.recv(BUFFER_SIZE)
-            
-            conn.close()
-            print("Proxy server shutting down")
 
 
 if __name__ == "__main__":
